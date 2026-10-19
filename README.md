@@ -1,23 +1,36 @@
-# Gizmo-for-Unity-Game-Scene
-Гизмо для игровой сцены в юнити, появляющееся при выборе объекта.
+# Runtime Translation Gizmo for Unity
 
-Проект создан как часть работы над человеко-машинным интерфейсом.
-Задача была сделать скрипт, который можно повесить на любой объект сцены в Unity, после данной операции, позволяющий перемещать объект по сцене.
-____
-## Описание работы
-- При клике на объект содержащий скрипт, появляются Гизмо переноса, хватаясь за которые можно перемещать объект.
-- При клике на пустое пространство, гизмо пропадают.
-- Гизмо адаптируюстся к размеру объекта.
+A runtime translation gizmo that appears when you select a Unity scene object and lets you drag it along three axes.
 
-Для отрисовки Гизмо использована низкоуровневая графическая библиотека GL, которая практически не нагружает процессор.
+![Translation axes on a selected cube in a Unity scene](docs/screenshots/runtime-gizmo.jpg)
 
-## Как это выглядит
+**Stack:** Unity 2020.3.14f1 · C# · Unity GL
 
-<img src ="https://sun9-84.userapi.com/s/v1/if2/2QMXzGDVJp0OAKy2IOp8DmqJiFv8l2IIKhWvYDuSDIFeISmpNeVYywQJu628cVU0e-_yqBqFwwmmRJPTpSfvOcIF.jpg?size=833x388&quality=96&type=album" widht="450" height="250">
-<img src ="https://sun9-17.userapi.com/s/v1/if2/CxPpgtzTP7O_hADSfqCRwYsnEJiDQUAVoKxtGHvsWRxaGF-YkJw_AiT5ib2cjTrNXyAGdp2cVuL6nIfeE5Qdbfcw.jpg?size=885x410&quality=96&type=album" widht="450" height="250">
+**My role:** Danil Volodin — developed the object-selection and translation script as part of a human–machine interface project.
 
-## Установка
-- Скачать файл Gizmo-for-Unity-Game-Scene\Assets\Scripts\DragnDrop.cs
-- Поместить файл в свой проект в папку со скриптами
-- В сцене редактора повесить скрипт на объект, у которого необходимо будет вызывать гизмо
-- Клик по объекту - гизмо появляются, клик по пустоте - гизмо исчезают
+## Run locally
+
+1. Open this repository in Unity **2020.3.14f1**, the version recorded in `ProjectSettings/ProjectVersion.txt`.
+2. Open `Assets/Scenes/SampleScene.unity` and inspect the objects and script assignments.
+3. Enter Play mode. Click an object with the `DragnDrop` component, then drag an axis handle to move it. Click empty space to hide the gizmo.
+
+To use it in another project:
+
+1. Copy [`Assets/Scripts/DragnDrop.cs`](Assets/Scripts/DragnDrop.cs) into your project's scripts folder.
+2. Attach `DragnDrop` to the object you want to move. Give the object a collider so mouse selection can hit it, and tag the scene camera `MainCamera`.
+3. Enter Play mode and select the object. The script creates trigger colliders for the axis handles at runtime.
+
+## How it works
+
+- Clicking an object with the script shows its translation axes; clicking empty space hides them.
+- Dragging a handle changes the corresponding position coordinate.
+- The arrows use the object's local-to-world matrix, so their visual size follows the object's transform scale.
+- Unity's low-level `GL` API draws the colored axis lines. No CPU-performance measurements are claimed.
+
+## Status and limits
+
+Preserved as a human–machine interface prototype. The surviving original screenshot is stored locally in `docs/screenshots/`. Compatibility with newer Unity versions has not been revalidated. The source uses the legacy mouse input API, physics raycasts and `Hidden/Internal-Colored`; other input or rendering setups may need adaptation. The visual arrows follow object scale, while the generated handle colliders use fixed local dimensions.
+
+## License
+
+Original project code is available under the [MIT License](LICENSE). Any bundled third-party components retain their own licensing terms.
